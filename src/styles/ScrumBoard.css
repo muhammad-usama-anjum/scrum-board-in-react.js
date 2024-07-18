@@ -1,0 +1,65 @@
+.scrum-board {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: black;
+  }
+  
+  .scrum-board h1 {
+    margin-top: 30px;
+    color: white;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 5rem;
+    margin-bottom: 50px;
+    font-weight: bold;
+  }
+  
+  .columns-container {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 20px;
+    margin: 0%;
+    padding: 0%;
+    gap: 1px;
+  }
+  
+  .column-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #f4f4f4;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  
+  .search-bar {
+    margin-bottom: 10px;
+  }
+  
+  .search-bar input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+
+  @media (max-width: 768px) {
+    .scrum-board h1 {
+      font-size: 3rem;
+    }
+    
+
+  }
+
+  @media (max-width: 576px) {
+    .scrum-board h1 {
+      font-size: 2.5rem;
+    }
+
+    .columns-container {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
