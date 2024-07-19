@@ -3,6 +3,7 @@
     display: flex;
     justify-content: flex-start;
     margin-bottom: 20px;
+    background-color: #313233;
   }
 
   @keyframes pulse {
@@ -28,6 +29,8 @@
     margin-right: 5px;
     margin-left: 10px;
     font-weight: bold;
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
 
   .action-buttons button:hover{
