@@ -26,9 +26,14 @@ const TaskForm = ({ task, setTask, closeForm, submitTask, editing }) => {
           <input type="date" id="task-due-date" value={task.dueDate} onChange={(e) => setTask({ ...task, dueDate: e.target.value })} />
           <label htmlFor="task-status">Status:</label>
           <select id="task-status" value={task.status} onChange={(e) => setTask({ ...task, status: e.target.value })}>
-            <option value="todo">To Do</option>
-            <option value="inProgress">In Progress</option>
-            <option value="done">Done</option>
+            <option value="Todo">To Do</option>
+            <option value="Open">Open</option>
+            <option value="New task">New Task</option>
+            <option value="In progress">In Progress</option>
+            <option value="Feedback needed">Feedback needed</option>
+            <option value="Ready for testing">Ready for testing</option>
+            <option value="QA in progress">QA in progress</option>
+            <option value="Done">Done</option>
           </select>
           <label htmlFor="task-spent-time">Spent Time (hours):</label>
           <input type="number" id="task-spent-time" value={task.spentTime} onChange={(e) => setTask({ ...task, spentTime: e.target.value })} />
