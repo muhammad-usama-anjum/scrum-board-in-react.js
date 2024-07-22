@@ -148,6 +148,14 @@ const ScrumBoard = () => {
 
   return (
     <div className="scrum-board">
+       <div className="search-bar">
+                <input
+                  type="text"
+                  placeholder="Search tasks..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
       <h1>AGILE SCRUM BOARD</h1>
       <ActionButtons 
         showAddTaskForm={showAddTaskForm} 
@@ -158,14 +166,7 @@ const ScrumBoard = () => {
       />
       <h3>NOTE: Only .JSON file that downlaoded from this board can be imported or the file with similar column structure and data can be imported</h3>
 
-      <div className="search-bar">
-                <input
-                  type="text"
-                  placeholder="Search tasks..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
+     
 
 <div className="columns-container">
         {columns.map((column, index) => (

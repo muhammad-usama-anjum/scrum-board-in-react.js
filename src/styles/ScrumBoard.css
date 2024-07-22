@@ -54,19 +54,26 @@
   }
   
   .search-bar {
+    margin-top: 20px;
+    width: 50%;
     margin-bottom: 10px;
     display: flex;
     flex-direction: row;
-    margin-right: auto;
+    margin-right: 5px;
     margin-left: 5px;
 
   }
   
   .search-bar input {
     width: 92%;
-    padding: 5px;
+    padding: 12px 20px 12px 40px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    font-size: medium;
+  background-image: url('https://img.icons8.com/?size=100&id=84039&format=png&color=000000');
+  background-repeat: no-repeat;
+  background-size: 5%;
+  background-position: 5px 5px; 
   }
   
 
