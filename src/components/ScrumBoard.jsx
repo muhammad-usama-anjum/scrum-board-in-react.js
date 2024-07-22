@@ -158,11 +158,7 @@ const ScrumBoard = () => {
       />
       <h3>NOTE: Only .JSON file that downlaoded from this board can be imported or the file with similar column structure and data can be imported</h3>
 
-<div className="columns-container">
-        {columns.map((column, index) => (
-          <div key={index} className="column-container">
-            {column.title === "Backlog" && (
-              <div className="search-bar">
+      <div className="search-bar">
                 <input
                   type="text"
                   placeholder="Search tasks..."
@@ -170,7 +166,10 @@ const ScrumBoard = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-            )}
+
+<div className="columns-container">
+        {columns.map((column, index) => (
+         
             <Column
               column={column}
               index={index}
@@ -183,7 +182,6 @@ const ScrumBoard = () => {
               openEditForm={openEditForm}
               activeTask={activeTask}
             />
-          </div>
         ))}
       </div>
 

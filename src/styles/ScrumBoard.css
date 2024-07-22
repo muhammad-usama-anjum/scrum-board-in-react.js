@@ -55,6 +55,10 @@
   
   .search-bar {
     margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    margin-right: auto;
+    margin-left: 5px;
 
   }
   
