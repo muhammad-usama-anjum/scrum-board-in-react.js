@@ -57,11 +57,13 @@ const ScrumBoard = () => {
   const onDrop = (dropColumnIndex) => {
     if (dragStartColumnIndex !== null && dragStartTaskIndex !== null) {
       const draggedTask = columns[dragStartColumnIndex].tasks.splice(dragStartTaskIndex, 1)[0];
+      draggedTask.status = columns[dropColumnIndex].title; 
       columns[dropColumnIndex].tasks.push(draggedTask);
       setColumns([...columns]);
       saveTasksToLocalStorage([...columns]);
     }
   };
+  
 
   const showAddTaskForm = () => setShowForm(true);
   const closeForm = () => setShowForm(false);
