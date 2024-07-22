@@ -156,6 +156,7 @@ const ScrumBoard = () => {
         fileInputRef={fileInputRef} 
         importTasks={importTasks} 
       />
+      <h3>NOTE: Only .JSON file that downlaoded from this board can be imported or the file with similar column structure and data can be imported</h3>
 
 <div className="columns-container">
         {columns.map((column, index) => (
