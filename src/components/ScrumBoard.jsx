@@ -59,7 +59,7 @@ const ScrumBoard = () => {
       const draggedTask = columns[dragStartColumnIndex].tasks.splice(dragStartTaskIndex, 1)[0];
       columns[dropColumnIndex].tasks.push(draggedTask);
       setColumns([...columns]);
-      saveTasksToLocalStorage();
+      saveTasksToLocalStorage([...columns]);
     }
   };
 
@@ -70,7 +70,8 @@ const ScrumBoard = () => {
     columns[0].tasks.push({ ...task });
     resetTaskForm();
     setShowForm(false);
-    saveTasksToLocalStorage();
+    setColumns([...columns]);
+    saveTasksToLocalStorage([...columns]);
   };
 
   const openTaskDetails = (task) => setActiveTask(task);
@@ -83,15 +84,16 @@ const ScrumBoard = () => {
     Object.assign(editingTask, editedTask);
     setEditingTask(null);
     setEditedTask(initialTaskState);
-    saveTasksToLocalStorage();
+    setColumns([...columns]);
+    saveTasksToLocalStorage([...columns]);
   };
 
   const cancelEdit = () => setEditingTask(null);
 
   const resetTaskForm = () => setTask(initialTaskState);
 
-  const saveTasksToLocalStorage = () => {
-    localStorage.setItem('scrumBoardColumns', JSON.stringify(columns));
+  const saveTasksToLocalStorage = (columnsToSave) => {
+    localStorage.setItem('scrumBoardColumns', JSON.stringify(columnsToSave));
   };
 
   const loadTasksFromLocalStorage = () => {
@@ -131,9 +133,31 @@ const ScrumBoard = () => {
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
-        const data = JSON.parse(e.target.result);
-        setColumns(data);
-        saveTasksToLocalStorage();
+        const newData = JSON.parse(e.target.result);
+
+        setColumns((prevColumns) => {
+          const updatedColumns = prevColumns.map(column => {
+            const newColumn = newData.find(col => col.title === column.title);
+            if (newColumn) {
+              const existingTasks = new Set(column.tasks.map(task => task.title));
+              const mergedTasks = [
+                ...column.tasks,
+                ...newColumn.tasks.filter(task => !existingTasks.has(task.title))
+              ];
+              return { ...column, tasks: mergedTasks };
+            }
+            return column;
+          });
+
+          newData.forEach(newColumn => {
+            if (!updatedColumns.find(col => col.title === newColumn.title)) {
+              updatedColumns.push(newColumn);
+            }
+          });
+
+          saveTasksToLocalStorage(updatedColumns);
+          return updatedColumns;
+        });
       } catch (error) {
         alert("Invalid JSON file.");
       }
@@ -148,14 +172,14 @@ const ScrumBoard = () => {
 
   return (
     <div className="scrum-board">
-       <div className="search-bar">
-                <input
-                  type="text"
-                  placeholder="Search tasks..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search tasks..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+      </div>
       <h1>AGILE SCRUM BOARD</h1>
       <ActionButtons 
         showAddTaskForm={showAddTaskForm} 
@@ -164,29 +188,26 @@ const ScrumBoard = () => {
         fileInputRef={fileInputRef} 
         importTasks={importTasks} 
       />
-      <h3>NOTE: Only .JSON file that downlaoded from this board can be imported or the file with similar column structure and data can be imported</h3>
+      <h3>NOTE: Only .JSON file that downloaded from this board can be imported or the file with similar column structure and data can be imported</h3>
 
-     
-
-<div className="columns-container">
+      <div className="columns-container">
         {columns.map((column, index) => (
-         
-            <Column
-              column={column}
-              index={index}
-              filteredTasks={filteredTasks}
-              onDragOver={(e) => e.preventDefault()}
-              onDrop={() => onDrop(index)}
-              onDragStart={onDragStart}
-              onDragEnd={onDragEnd}
-              openTaskDetails={openTaskDetails}
-              openEditForm={openEditForm}
-              activeTask={activeTask}
-            />
+          <Column
+            key={column.title}
+            column={column}
+            index={index}
+            filteredTasks={filteredTasks}
+            onDragOver={(e) => e.preventDefault()}
+            onDrop={() => onDrop(index)}
+            onDragStart={onDragStart}
+            onDragEnd={onDragEnd}
+            openTaskDetails={openTaskDetails}
+            openEditForm={openEditForm}
+            activeTask={activeTask}
+          />
         ))}
       </div>
 
-      
       {showForm && (
         <TaskForm
           task={task}
