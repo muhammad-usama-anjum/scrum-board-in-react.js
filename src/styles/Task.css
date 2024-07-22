@@ -29,8 +29,8 @@
   top: 0;
   right: 0;
   font-size: 0.8em;
-  color: gray;
-  background: rgba(250, 246, 246, 0.8);
+  color: rgb(94, 92, 92);
+  font-weight: bold;
   padding: 1px 1px;
   border-radius: 1px;
 }
