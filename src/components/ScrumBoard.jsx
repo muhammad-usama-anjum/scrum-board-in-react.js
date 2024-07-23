@@ -88,14 +88,27 @@ const ScrumBoard = () => {
   };
 
   const submitEditedTask = () => {
-    const taskIndex = columns.flatMap(col => col.tasks).findIndex(t => t.id === editingTask.id);
-    if (taskIndex > -1) {
-      const [columnIndex, taskIdx] = [Math.floor(taskIndex / columns[0].tasks.length), taskIndex % columns[0].tasks.length];
-      columns[columnIndex].tasks[taskIdx] = { ...editedTask };
-      setEditingTask(null);
-      setEditedTask(initialTaskState);
-      setColumns([...columns]);
-      saveTasksToLocalStorage([...columns]);
+    let taskUpdated = false;
+
+    const updatedColumns = columns.map(column => {
+      const taskIndex = column.tasks.findIndex(t => t.id === editingTask.id);
+
+      if (taskIndex !== -1) {
+        // Update the task details in place
+        column.tasks[taskIndex] = { ...editedTask };
+        taskUpdated = true;
+      }
+
+      return column;
+    });
+
+    if (taskUpdated) {
+      setColumns(updatedColumns); // Trigger reactivity and update state
+      setEditingTask(null); // Reset editing task
+      setEditedTask(initialTaskState); // Reset edited task state
+      saveTasksToLocalStorage(updatedColumns); // Save changes to local storage
+    } else {
+      console.error("Task not found in any column.");
     }
   };
 
