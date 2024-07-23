@@ -68,15 +68,14 @@ const TaskForm = ({ task, setTask, closeForm, submitTask, editing }) => {
   onChange={(e) => {
     const newSpentTime = e.target.value;
     
-    // Remove leading zeros
     const cleanSpentTime = newSpentTime.replace(/^0+(?!$)/, '');
 
-    // Convert the input to a float and validate
+   
     const floatSpentTime = parseFloat(cleanSpentTime);
     if (!isNaN(floatSpentTime) && floatSpentTime > 0) {
       setTask({ ...task, spentTime: floatSpentTime });
     } else {
-      // Ensure the input is set correctly if invalid input is given
+
       setTask({ ...task, spentTime: '' });
     }
   }}

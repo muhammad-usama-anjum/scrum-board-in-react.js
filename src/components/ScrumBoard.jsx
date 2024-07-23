@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { v4 as uuidv4 } from 'uuid'; // Import uuid for unique ID generation
+import { v4 as uuidv4 } from 'uuid'; 
 import TaskForm from './TaskForm';
 import Column from './Column';
 import ActionButtons from './ActionButtons';
@@ -7,7 +7,7 @@ import Modal from './Modal';
 import '../styles/ScrumBoard.css';
 
 const initialTaskState = {
-  id: '', // Add id property
+  id: '',
   title: '',
   description: '',
   assignee: '',
@@ -67,7 +67,7 @@ const ScrumBoard = () => {
   };
 
   const showAddTaskForm = () => {
-    setTask({ ...initialTaskState, id: uuidv4() }); // Reset task with new UUID
+    setTask({ ...initialTaskState, id: uuidv4() });
     setShowForm(true);
   };
 
@@ -94,7 +94,6 @@ const ScrumBoard = () => {
       const taskIndex = column.tasks.findIndex(t => t.id === editingTask.id);
 
       if (taskIndex !== -1) {
-        // Update the task details in place
         column.tasks[taskIndex] = { ...editedTask };
         taskUpdated = true;
       }
@@ -103,10 +102,10 @@ const ScrumBoard = () => {
     });
 
     if (taskUpdated) {
-      setColumns(updatedColumns); // Trigger reactivity and update state
-      setEditingTask(null); // Reset editing task
-      setEditedTask(initialTaskState); // Reset edited task state
-      saveTasksToLocalStorage(updatedColumns); // Save changes to local storage
+      setColumns(updatedColumns); 
+      setEditingTask(null); 
+      setEditedTask(initialTaskState); 
+      saveTasksToLocalStorage(updatedColumns); 
     } else {
       console.error("Task not found in any column.");
     }
@@ -160,7 +159,6 @@ const ScrumBoard = () => {
         const newData = JSON.parse(e.target.result);
   
         setColumns((prevColumns) => {
-          // Create a map to track existing tasks by ID
           const existingTaskMap = new Map();
           prevColumns.forEach(column => {
             column.tasks.forEach(task => {
@@ -168,7 +166,6 @@ const ScrumBoard = () => {
             });
           });
   
-          // Process the new data to avoid duplicates
           const updatedColumns = prevColumns.map(column => {
             const newColumn = newData.find(col => col.title === column.title);
             if (newColumn) {
@@ -182,7 +179,7 @@ const ScrumBoard = () => {
             return column;
           });
   
-          // Add new columns from the imported data if they don't already exist
+        
           newData.forEach(newColumn => {
             if (!updatedColumns.find(col => col.title === newColumn.title)) {
               const uniqueTasks = newColumn.tasks.filter(task => !existingTaskMap.has(task.id));
