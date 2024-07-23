@@ -76,6 +76,10 @@
   background-color: #cce5ff;
 }
 
+.task-card.low{
+  background-color: #fceb55;
+}
+
 .task-card.normal:hover{
   background-color: #47b6f7;
 
@@ -85,6 +89,11 @@
 
 .task-card.high:hover{
   background-color: #f53a3a;
+
+}
+
+.task-card.low:hover{
+  background-color: #e7f710;
 
 }
 

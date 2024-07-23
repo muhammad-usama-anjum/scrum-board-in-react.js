@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { v4 as uuidv4 } from 'uuid'; // Import uuid for unique ID generation
 import TaskForm from './TaskForm';
 import Column from './Column';
 import ActionButtons from './ActionButtons';
@@ -6,11 +7,12 @@ import Modal from './Modal';
 import '../styles/ScrumBoard.css';
 
 const initialTaskState = {
+  id: '', // Add id property
   title: '',
   description: '',
   assignee: '',
   dueDate: '',
-  status: 'todo',
+  status: 'Backlog',
   spentTime: 0,
   priority: 'normal'
 };
@@ -18,7 +20,7 @@ const initialTaskState = {
 const ScrumBoard = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showForm, setShowForm] = useState(false);
-  const [task, setTask] = useState(initialTaskState);
+  const [task, setTask] = useState({ ...initialTaskState, id: uuidv4() });
   const [editingTask, setEditingTask] = useState(null);
   const [editedTask, setEditedTask] = useState(initialTaskState);
   const [activeTask, setActiveTask] = useState(null);
@@ -57,19 +59,22 @@ const ScrumBoard = () => {
   const onDrop = (dropColumnIndex) => {
     if (dragStartColumnIndex !== null && dragStartTaskIndex !== null) {
       const draggedTask = columns[dragStartColumnIndex].tasks.splice(dragStartTaskIndex, 1)[0];
-      draggedTask.status = columns[dropColumnIndex].title; 
+      draggedTask.status = columns[dropColumnIndex].title;
       columns[dropColumnIndex].tasks.push(draggedTask);
       setColumns([...columns]);
       saveTasksToLocalStorage([...columns]);
     }
   };
-  
 
-  const showAddTaskForm = () => setShowForm(true);
+  const showAddTaskForm = () => {
+    setTask({ ...initialTaskState, id: uuidv4() }); // Reset task with new UUID
+    setShowForm(true);
+  };
+
   const closeForm = () => setShowForm(false);
 
   const submitTask = () => {
-    columns[0].tasks.push({ ...task });
+    columns[0].tasks.unshift({ ...task });
     resetTaskForm();
     setShowForm(false);
     setColumns([...columns]);
@@ -83,16 +88,20 @@ const ScrumBoard = () => {
   };
 
   const submitEditedTask = () => {
-    Object.assign(editingTask, editedTask);
-    setEditingTask(null);
-    setEditedTask(initialTaskState);
-    setColumns([...columns]);
-    saveTasksToLocalStorage([...columns]);
+    const taskIndex = columns.flatMap(col => col.tasks).findIndex(t => t.id === editingTask.id);
+    if (taskIndex > -1) {
+      const [columnIndex, taskIdx] = [Math.floor(taskIndex / columns[0].tasks.length), taskIndex % columns[0].tasks.length];
+      columns[columnIndex].tasks[taskIdx] = { ...editedTask };
+      setEditingTask(null);
+      setEditedTask(initialTaskState);
+      setColumns([...columns]);
+      saveTasksToLocalStorage([...columns]);
+    }
   };
 
   const cancelEdit = () => setEditingTask(null);
 
-  const resetTaskForm = () => setTask(initialTaskState);
+  const resetTaskForm = () => setTask({ ...initialTaskState, id: uuidv4() });
 
   const saveTasksToLocalStorage = (columnsToSave) => {
     localStorage.setItem('scrumBoardColumns', JSON.stringify(columnsToSave));
@@ -131,32 +140,45 @@ const ScrumBoard = () => {
   const importTasks = (event) => {
     const file = event.target.files[0];
     if (!file) return;
-
+  
     const reader = new FileReader();
     reader.onload = (e) => {
       try {
         const newData = JSON.parse(e.target.result);
-
+  
         setColumns((prevColumns) => {
+          // Create a map to track existing tasks by ID
+          const existingTaskMap = new Map();
+          prevColumns.forEach(column => {
+            column.tasks.forEach(task => {
+              existingTaskMap.set(task.id, task);
+            });
+          });
+  
+          // Process the new data to avoid duplicates
           const updatedColumns = prevColumns.map(column => {
             const newColumn = newData.find(col => col.title === column.title);
             if (newColumn) {
-              const existingTasks = new Set(column.tasks.map(task => task.title));
+              const existingTaskIds = new Set(column.tasks.map(task => task.id));
               const mergedTasks = [
                 ...column.tasks,
-                ...newColumn.tasks.filter(task => !existingTasks.has(task.title))
+                ...newColumn.tasks.filter(task => !existingTaskIds.has(task.id) && !existingTaskMap.has(task.id))
               ];
               return { ...column, tasks: mergedTasks };
             }
             return column;
           });
-
+  
+          // Add new columns from the imported data if they don't already exist
           newData.forEach(newColumn => {
             if (!updatedColumns.find(col => col.title === newColumn.title)) {
-              updatedColumns.push(newColumn);
+              const uniqueTasks = newColumn.tasks.filter(task => !existingTaskMap.has(task.id));
+              if (uniqueTasks.length > 0) {
+                updatedColumns.push({ ...newColumn, tasks: uniqueTasks });
+              }
             }
           });
-
+  
           saveTasksToLocalStorage(updatedColumns);
           return updatedColumns;
         });
@@ -166,6 +188,7 @@ const ScrumBoard = () => {
     };
     reader.readAsText(file);
   };
+  
 
   const closeModal = () => {
     setShowModal(false);

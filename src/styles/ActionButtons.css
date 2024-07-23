@@ -6,6 +6,15 @@
     background-color: #313233;
   }
 
+  .left-buttons {
+    flex: 1;
+  }
+
+  .right-buttons {
+    display: flex;
+    gap: 10px; /* Space between buttons */
+  }
+
   @keyframes pulse {
     0% {
         transform: scale(1);

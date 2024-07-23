@@ -51,54 +51,80 @@ const TaskForm = ({ task, setTask, closeForm, submitTask, editing }) => {
           <input type="text" id="task-title" value={task.title} onChange={(e) => setTask({ ...task, title: e.target.value })} required />
           
           <label htmlFor="task-description">Description:</label>
-          <textarea id="task-description" value={task.description} onChange={(e) => setTask({ ...task, description: e.target.value })}></textarea>
+          <textarea id="task-description" required value={task.description} onChange={(e) => setTask({ ...task, description: e.target.value })}></textarea>
           
           <label htmlFor="task-assignee">Assignee:</label>
-          <input type="text" id="task-assignee" value={task.assignee} onChange={(e) => setTask({ ...task, assignee: e.target.value })} />
+          <input type="text" id="task-assignee" value={task.assignee} onChange={(e) => setTask({ ...task, assignee: e.target.value })} required/>
           
           <label htmlFor="task-due-date">Due Date:</label>
-          <input type="date" id="task-due-date" min={today} value={task.dueDate} onChange={(e) => setTask({ ...task, dueDate: e.target.value })} />
-          
-          <label htmlFor="task-status">Status:</label>
-          <select id="task-status" value={task.status} onChange={(e) => setTask({ ...task, status: e.target.value })}>
-            <option value="Todo">To Do</option>
-            <option value="Open">Open</option>
-            <option value="New task">New Task</option>
-            <option value="In progress">In Progress</option>
-            <option value="Feedback needed">Feedback needed</option>
-            <option value="Ready for testing">Ready for testing</option>
-            <option value="QA in progress">QA in progress</option>
-            <option value="Done">Done</option>
-          </select>
+          <input type="date" id="task-due-date" min={today} value={task.dueDate} onChange={(e) => setTask({ ...task, dueDate: e.target.value })} required />
+
           
           <label htmlFor="task-spent-time">Spent Time (hours):</label>
           <input
-            type="number"
-            id="task-spent-time"
-            value={task.spentTime}
-            onChange={(e) => {
-              const newSpentTime = e.target.value;
-              setTask({ ...task, spentTime: newSpentTime });
-              if (newSpentTime < 0) {
-                setErrors({ spentTime: 'Spent time cannot be less than 0.' });
-                setShowPopup(true);
-              } else {
-                setErrors({});
-                setShowPopup(false);
-              }
-            }}
-            min="0"
-          />
+  type="number"
+  id="task-spent-time"
+  value={task.spentTime}
+  onChange={(e) => {
+    const newSpentTime = e.target.value;
+    
+    // Remove leading zeros
+    const cleanSpentTime = newSpentTime.replace(/^0+(?!$)/, '');
+
+    // Convert the input to a float and validate
+    const floatSpentTime = parseFloat(cleanSpentTime);
+    if (!isNaN(floatSpentTime) && floatSpentTime > 0) {
+      setTask({ ...task, spentTime: floatSpentTime });
+    } else {
+      // Ensure the input is set correctly if invalid input is given
+      setTask({ ...task, spentTime: '' });
+    }
+  }}
+  min="0"
+  step="0.01" 
+/>
+
+
           
-          <label htmlFor="task-priority">Priority:</label>
-          <select id="task-priority" value={task.priority} onChange={(e) => setTask({ ...task, priority: e.target.value })}>
-            <option value="normal">Normal</option>
-            <option value="high">High</option>
-          </select>
+<label htmlFor="task-priority">Priority:</label>
+<div className="priority-options">
+  <label>
+    <input
+      type="radio"
+      name="priority"
+      value="low"
+      checked={task.priority === 'low'}
+      onChange={(e) => setTask({ ...task, priority: e.target.value })}
+    />
+    Low
+  </label>
+  <label>
+    <input
+      type="radio"
+      name="priority"
+      value="normal"
+      checked={task.priority === 'normal'}
+      onChange={(e) => setTask({ ...task, priority: e.target.value })}
+    />
+    Normal
+  </label>
+  <label>
+    <input
+      type="radio"
+      name="priority"
+      value="high"
+      checked={task.priority === 'high'}
+      onChange={(e) => setTask({ ...task, priority: e.target.value })}
+    />
+    High
+  </label>
+</div>
+
           
           <div className="form-buttons">
+          <button type="button" onClick={closeForm}>Cancel</button>
             <button type="submit">{editing ? 'Save Changes' : 'Add Task'}</button>
-            <button type="button" onClick={closeForm}>Cancel</button>
+            
           </div>
         </form>
       </div>
