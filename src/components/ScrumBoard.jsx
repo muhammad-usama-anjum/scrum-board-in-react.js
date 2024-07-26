@@ -221,16 +221,6 @@ const ScrumBoard = () => {
       <div className="columns-container">
         {columns.map((column, index) => (
           <div key={index} className="column-container">
-            {column.title === "Backlog" && (
-              <div className="search-bar">
-                <input
-                  type="text"
-                  placeholder="Search tasks..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-              </div>
-            )}
             <Column
               column={column}
               index={index}
@@ -242,6 +232,9 @@ const ScrumBoard = () => {
               openTaskDetails={openTaskDetails}
               openEditForm={openEditForm}
               activeTask={activeTask}
+              showSearchBar={column.title === "Backlog"}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
             />
           </div>
         ))}
