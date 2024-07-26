@@ -23,6 +23,9 @@ const TaskForm = ({ task, setTask, closeForm, submitTask, editing }) => {
     if (task.spentTime < 0) {
       errors.spentTime = 'Spent time cannot be less than 0.';
     }
+    if (task.spentTime === '' || task.spentTime == null) {
+      errors.spentTime = 'Spent time is required.';
+    }
 
     setErrors(errors);
     setShowPopup(Object.keys(errors).length > 0);
