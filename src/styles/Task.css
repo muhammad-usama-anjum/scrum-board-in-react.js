@@ -7,11 +7,15 @@
   margin-bottom: 10px;
   cursor: pointer;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 150px; /* Set a max-width to control the card size */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .task-card:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 .task-header {
   display: flex;
   justify-content: space-between;
@@ -22,6 +26,10 @@
 .task-title {
   font-weight: bold;
   font-size: large;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: normal; /* Ensure text wraps within the title */
+  overflow: hidden;
 }
 
 .task-time {
@@ -50,7 +58,7 @@
   margin-bottom: 5px;
 }
 
-.edit{
+.edit {
   padding: 5px 10px;
   font-size: 12px;
   background-color: #000103;
@@ -63,46 +71,36 @@
   font-weight: bold;
 }
 
-.edit:hover{
+.edit:hover {
   animation: pulse 0.5s ease-in-out forwards;
   background-color: #343435;
 }
 
-.task-card.high{
+.task-card.high {
   background-color: #f59292;
 }
 
-.task-card.normal{
+.task-card.normal {
   background-color: #cce5ff;
 }
 
-.task-card.low{
+.task-card.low {
   background-color: #fceb55;
 }
 
-.task-card.normal:hover{
+.task-card.normal:hover {
   background-color: #47b6f7;
-
 }
 
-
-
-.task-card.high:hover{
+.task-card.high:hover {
   background-color: #f53a3a;
-
 }
 
-.task-card.low:hover{
+.task-card.low:hover {
   background-color: #e7f710;
-
 }
 
 .task-card.dragging {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-  opacity: 0.8; 
+  opacity: 0.8;
 }
-
-
-
-  
-
