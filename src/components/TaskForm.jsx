@@ -84,7 +84,9 @@ const TaskForm = ({ task, setTask, closeForm, submitTask, editing }) => {
   }}
   min="0"
   step="0.01" 
+  required
 />
+{errors.spentTime && <span id="spent-time-error" style={{ color: 'red' }}>{errors.spentTime}</span>}
 
 
           
