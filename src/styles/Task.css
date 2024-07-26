@@ -28,8 +28,9 @@
   font-size: large;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  white-space: normal; /* Ensure text wraps within the title */
+  white-space: nowrap; /* Ensure text wraps within the title */
   overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .task-time {
