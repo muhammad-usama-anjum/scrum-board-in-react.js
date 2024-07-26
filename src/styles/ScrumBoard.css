@@ -54,27 +54,21 @@
   }
   
   .search-bar {
-    margin-top: 10px;
-    width: 30%;
     margin-bottom: 10px;
-    display: flex;
-    flex-direction: row;
-    margin-right: 5px;
-    margin-left: 5px;
-
   }
-  
+
   .search-bar input {
-    width: 92%;
+    width: 83%;
     padding: 6px 10px 6px 20px;
     border: 1px solid #ccc;
-    border-radius: 2px;
+    border-radius: 4px;
     font-size: small;
-  background-image: url('https://img.icons8.com/?size=100&id=84039&format=png&color=000000');
-  background-repeat: no-repeat;
-  background-size: 5%;
-  background-position: 2px 4px; 
+    background-image: url('https://img.icons8.com/?size=100&id=84039&format=png&color=000000');
+    background-repeat: no-repeat;
+    background-size: 10%;
+    background-position: 2px 4px; 
   }
+  
   
 
   @media (max-width: 768px) {

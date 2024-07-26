@@ -208,14 +208,6 @@ const ScrumBoard = () => {
 
   return (
     <div className="scrum-board">
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Search tasks..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </div>
       <h1>AGILE SCRUM BOARD</h1>
       <ActionButtons 
         showAddTaskForm={showAddTaskForm} 
@@ -228,19 +220,30 @@ const ScrumBoard = () => {
 
       <div className="columns-container">
         {columns.map((column, index) => (
-          <Column
-            key={column.title}
-            column={column}
-            index={index}
-            filteredTasks={filteredTasks}
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={() => onDrop(index)}
-            onDragStart={onDragStart}
-            onDragEnd={onDragEnd}
-            openTaskDetails={openTaskDetails}
-            openEditForm={openEditForm}
-            activeTask={activeTask}
-          />
+          <div key={index} className="column-container">
+            {column.title === "Backlog" && (
+              <div className="search-bar">
+                <input
+                  type="text"
+                  placeholder="Search tasks..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+              </div>
+            )}
+            <Column
+              column={column}
+              index={index}
+              filteredTasks={filteredTasks}
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={() => onDrop(index)}
+              onDragStart={onDragStart}
+              onDragEnd={onDragEnd}
+              openTaskDetails={openTaskDetails}
+              openEditForm={openEditForm}
+              activeTask={activeTask}
+            />
+          </div>
         ))}
       </div>
 
