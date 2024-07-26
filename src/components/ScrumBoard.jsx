@@ -169,17 +169,16 @@ const ScrumBoard = () => {
           const updatedColumns = prevColumns.map(column => {
             const newColumn = newData.find(col => col.title === column.title);
             if (newColumn) {
-              const existingTaskIds = new Set(column.tasks.map(task => task.id));
-              const mergedTasks = [
-                ...column.tasks,
-                ...newColumn.tasks.filter(task => !existingTaskIds.has(task.id) && !existingTaskMap.has(task.id))
-              ];
-              return { ...column, tasks: mergedTasks };
+              const updatedTasks = column.tasks.map(task => {
+                const newTask = newColumn.tasks.find(t => t.id === task.id);
+                return newTask ? { ...task, ...newTask } : task;
+              });
+              const newTasks = newColumn.tasks.filter(task => !existingTaskMap.has(task.id));
+              return { ...column, tasks: [...updatedTasks, ...newTasks] };
             }
             return column;
           });
   
-        
           newData.forEach(newColumn => {
             if (!updatedColumns.find(col => col.title === newColumn.title)) {
               const uniqueTasks = newColumn.tasks.filter(task => !existingTaskMap.has(task.id));
@@ -198,6 +197,8 @@ const ScrumBoard = () => {
     };
     reader.readAsText(file);
   };
+  
+  
   
 
   const closeModal = () => {
