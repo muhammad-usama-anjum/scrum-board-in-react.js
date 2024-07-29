@@ -57,6 +57,15 @@
   justify-content: space-between;
   font-size: small;
   margin-bottom: 5px;
+  
+}
+
+.task-assignee{
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .edit {
